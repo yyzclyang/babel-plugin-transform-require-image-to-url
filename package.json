@@ -2,10 +2,19 @@
   "name": "babel-plugin-transform-require-image-to-string",
   "version": "0.0.1",
   "main": "lib/index.js",
+  "scripts": {
+    "build": "babel src --out-dir lib"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yyzclyang/babel-plugin-transform-require-image-to-string.git"
   },
   "author": "yyzcl <yyzclyang@outlook.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "prettier": "^2.1.2"
+  }
 }
