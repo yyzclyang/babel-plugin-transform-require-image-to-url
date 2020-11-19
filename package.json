@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-transform-require-image-to-string",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yyzclyang/babel-plugin-transform-require-image-to-string.git"
+  },
+  "author": "yyzcl <yyzclyang@outlook.com>",
+  "license": "MIT"
+}
