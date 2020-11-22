@@ -24,10 +24,12 @@ module.exports = function ({ types: t }) {
             } else {
               _path.replaceWith(newNode);
             }
-            copyFile(
-              filePath,
-              path.resolve(_ref.cwd, _ref.opts.outDir, md5FileName)
-            );
+            if (_ref.opts.outDir) {
+              copyFile(
+                filePath,
+                path.resolve(_ref.cwd, _ref.opts.outDir, md5FileName)
+              );
+            }
           }
         }
       }
