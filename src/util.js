@@ -27,7 +27,7 @@ function getFileNewName(relativeFilePath, md5) {
   return baseName + '.' + md5Value.substr(0, md5) + extName;
 }
 
-const defaultImageValidator = /\.(png|jpeg|jpg|gif|ico)$/;
+const defaultImageValidator = /\.(png|jpeg|jpg|gif)$/;
 
 module.exports = {
   testAsset,
