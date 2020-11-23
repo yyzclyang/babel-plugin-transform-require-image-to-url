@@ -1,11 +1,5 @@
 const path = require('path');
-const {
-  testAsset,
-  copyFile,
-  getFileNewName,
-  defaultImageValidator,
-  defaultOutDir
-} = require('./util');
+const { testAsset, getFileNewName, defaultImageValidator } = require('./util');
 
 module.exports = function ({ types: t }) {
   return {
@@ -17,7 +11,6 @@ module.exports = function ({ types: t }) {
             opts: {
               test: imageValidator = defaultImageValidator,
               publicPath = '',
-              outDir = defaultOutDir,
               md5 = 4
             }
           } = _ref;
@@ -39,9 +32,6 @@ module.exports = function ({ types: t }) {
               }
             } else {
               _path.replaceWith(newNode);
-            }
-            if (outDir) {
-              copyFile(filePath, path.resolve(_ref.cwd, outDir, fileNewName));
             }
           }
         }

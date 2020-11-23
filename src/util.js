@@ -16,15 +16,6 @@ function testAsset(rule, fileName) {
   }
 }
 
-function copyFile(from, to) {
-  if (fs.existsSync(to)) {
-    return;
-  }
-  const toDir = path.dirname(to);
-  fs.mkdirSync(toDir, { recursive: true });
-  fs.copyFileSync(from, to);
-}
-
 function getFileNewName(filePath, md5) {
   if (!md5) {
     return path.basename(filePath);
@@ -40,12 +31,8 @@ function getFileNewName(filePath, md5) {
 
 const defaultImageValidator = /\.(png|jpeg|jpg|gif|ico)$/;
 
-const defaultOutDir = 'dist';
-
 module.exports = {
   testAsset,
-  copyFile,
   getFileNewName,
-  defaultImageValidator,
-  defaultOutDir
+  defaultImageValidator
 };
