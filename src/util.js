@@ -32,7 +32,7 @@ function getMD5FileName(filePath) {
   const fsHash = crypto.createHash('md5');
   fsHash.update(fileBuffer);
   const md5 = fsHash.digest('hex');
-  return baseName + '.' + md5 + extName;
+  return baseName + '.' + md5.substr(0, 8) + extName;
 }
 
 const defaultImageValidator = /\.(png|jpeg|jpg|gif|ico)$/;
