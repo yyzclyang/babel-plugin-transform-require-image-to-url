@@ -1,4 +1,3 @@
-const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
@@ -16,15 +15,14 @@ function testAsset(rule, fileName) {
   }
 }
 
-function getFileNewName(filePath, md5) {
+function getFileNewName(relativeFilePath, md5) {
   if (!md5) {
-    return path.basename(filePath);
+    return path.basename(relativeFilePath);
   }
-  const extName = path.extname(filePath);
-  const baseName = path.basename(filePath, extName);
-  const fileBuffer = fs.readFileSync(filePath);
+  const extName = path.extname(relativeFilePath);
+  const baseName = path.basename(relativeFilePath, extName);
   const fsHash = crypto.createHash('md5');
-  fsHash.update(fileBuffer);
+  fsHash.update(relativeFilePath);
   const md5Value = fsHash.digest('hex');
   return baseName + '.' + md5Value.substr(0, md5) + extName;
 }

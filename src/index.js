@@ -20,7 +20,10 @@ module.exports = function ({ types: t }) {
             _path.node.arguments[0].value
           );
           const originFileName = path.basename(filePath);
-          const fileNewName = getFileNewName(filePath, md5);
+          const fileNewName = getFileNewName(
+            path.relative(_ref.cwd, filePath),
+            md5
+          );
 
           if (testAsset(imageValidator, originFileName)) {
             const newNode = t.valueToNode(publicPath + fileNewName);
