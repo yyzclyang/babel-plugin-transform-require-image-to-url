@@ -4,16 +4,12 @@ const crypto = require('crypto');
 
 function testAsset(rule, fileName) {
   switch (Object.prototype.toString.call(rule)) {
-    case '[object RegExp]':
-      {
-        return rule.test(fileName);
-      }
-      break;
-    case '[object String]':
-      {
-        return new RegExp(rule).test(fileName);
-      }
-      break;
+    case '[object RegExp]': {
+      return rule.test(fileName);
+    }
+    case '[object String]': {
+      return new RegExp(rule).test(fileName);
+    }
     default: {
       return false;
     }
@@ -39,4 +35,14 @@ function getMD5FileName(filePath) {
   return baseName + '.' + md5 + extName;
 }
 
-module.exports = { testAsset, copyFile, getMD5FileName };
+const defaultImageValidator = /\.(png|jpeg|jpg|gif|ico)$/;
+
+const defaultOutDir = 'dist';
+
+module.exports = {
+  testAsset,
+  copyFile,
+  getMD5FileName,
+  defaultImageValidator,
+  defaultOutDir
+};
