@@ -25,14 +25,17 @@ function copyFile(from, to) {
   fs.copyFileSync(from, to);
 }
 
-function getMD5FileName(filePath) {
+function getFileNewName(filePath, md5) {
+  if (!md5) {
+    return path.basename(filePath);
+  }
   const extName = path.extname(filePath);
   const baseName = path.basename(filePath, extName);
   const fileBuffer = fs.readFileSync(filePath);
   const fsHash = crypto.createHash('md5');
   fsHash.update(fileBuffer);
-  const md5 = fsHash.digest('hex');
-  return baseName + '.' + md5.substr(0, 8) + extName;
+  const md5Value = fsHash.digest('hex');
+  return baseName + '.' + md5Value.substr(0, md5) + extName;
 }
 
 const defaultImageValidator = /\.(png|jpeg|jpg|gif|ico)$/;
@@ -42,7 +45,7 @@ const defaultOutDir = 'dist';
 module.exports = {
   testAsset,
   copyFile,
-  getMD5FileName,
+  getFileNewName,
   defaultImageValidator,
   defaultOutDir
 };

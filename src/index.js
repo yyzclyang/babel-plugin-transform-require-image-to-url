@@ -2,7 +2,7 @@ const path = require('path');
 const {
   testAsset,
   copyFile,
-  getMD5FileName,
+  getFileNewName,
   defaultImageValidator,
   defaultOutDir
 } = require('./util');
@@ -17,7 +17,8 @@ module.exports = function ({ types: t }) {
             opts: {
               test: imageValidator = defaultImageValidator,
               publicPath = '',
-              outDir = defaultOutDir
+              outDir = defaultOutDir,
+              md5 = 4
             }
           } = _ref;
 
@@ -26,10 +27,10 @@ module.exports = function ({ types: t }) {
             _path.node.arguments[0].value
           );
           const originFileName = path.basename(filePath);
-          const md5FileName = getMD5FileName(filePath);
+          const fileNewName = getFileNewName(filePath, md5);
 
           if (testAsset(imageValidator, originFileName)) {
-            const newNode = t.valueToNode(publicPath + md5FileName);
+            const newNode = t.valueToNode(publicPath + fileNewName);
             const _parentPath = _path.parentPath;
             if (t.isMemberExpression(_parentPath)) {
               const key = _parentPath.toComputedKey();
@@ -40,7 +41,7 @@ module.exports = function ({ types: t }) {
               _path.replaceWith(newNode);
             }
             if (outDir) {
-              copyFile(filePath, path.resolve(_ref.cwd, outDir, md5FileName));
+              copyFile(filePath, path.resolve(_ref.cwd, outDir, fileNewName));
             }
           }
         }
