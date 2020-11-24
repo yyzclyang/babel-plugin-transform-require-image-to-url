@@ -1,40 +1,43 @@
 const path = require('path');
-const { testAsset, getFileNewName, defaultImageValidator } = require('./util');
+const {
+  isRequireStatement,
+  isValidArgument,
+  isValidAsset,
+  getHashFileName,
+  defaultImageValidator
+} = require('./util');
 
 module.exports = function ({ types: t }) {
   return {
     visitor: {
-      CallExpression(_path, _ref = { opts: {} }) {
-        if (_path.node.callee.name === 'require') {
+      CallExpression(p, state) {
+        if (isRequireStatement(p) && isValidArgument(p)) {
           const {
-            filename,
             opts: {
               test: imageValidator = defaultImageValidator,
               publicPath = '',
               md5 = 4
             }
-          } = _ref;
+          } = state;
 
           const filePath = path.resolve(
-            path.dirname(filename),
-            _path.node.arguments[0].value
+            path.dirname(state.file.opts.filename),
+            p.get('arguments')[0].node.value
           );
-          const originFileName = path.basename(filePath);
-          const fileNewName = getFileNewName(
-            path.relative(_ref.cwd, filePath),
+          const fileName = path.basename(filePath);
+          const hashFileName = getHashFileName(
+            path.relative(state.cwd, filePath),
             md5
           );
 
-          if (testAsset(imageValidator, originFileName)) {
-            const newNode = t.valueToNode(publicPath + fileNewName);
-            const _parentPath = _path.parentPath;
-            if (t.isMemberExpression(_parentPath)) {
-              const key = _parentPath.toComputedKey();
-              if (key.value === 'default') {
-                _parentPath.replaceWith(newNode);
+          if (isValidAsset(imageValidator, fileName)) {
+            const pp = p.parentPath;
+            if (t.isMemberExpression(pp)) {
+              if (pp.toComputedKey().value === 'default') {
+                pp.replaceWith(t.valueToNode(publicPath + hashFileName));
               }
             } else {
-              _path.replaceWith(newNode);
+              p.replaceWith(t.valueToNode(publicPath + hashFileName));
             }
           }
         }

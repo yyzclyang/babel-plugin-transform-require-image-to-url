@@ -1,16 +1,26 @@
 const path = require('path');
 const crypto = require('crypto');
 
-function testAsset(rule, fileName) {
-  switch (Object.prototype.toString.call(rule)) {
+function isRequireStatement(p) {
+  const callee = p.get('callee');
+  return callee.isIdentifier() && callee.equals('name', 'require');
+}
+
+function isValidArgument(p) {
+  const arg = p.get('arguments')[0];
+  return arg && arg.isStringLiteral();
+}
+
+function isValidAsset(validator, fileName) {
+  switch (Object.prototype.toString.call(validator)) {
     case '[object RegExp]': {
-      return rule.test(fileName);
+      return validator.test(fileName);
     }
     case '[object String]': {
-      return new RegExp(rule).test(fileName);
+      return new RegExp(validator).test(fileName);
     }
     case '[object Function]': {
-      return rule(fileName);
+      return validator(fileName);
     }
     default: {
       return false;
@@ -18,7 +28,7 @@ function testAsset(rule, fileName) {
   }
 }
 
-function getFileNewName(relativeFilePath, md5) {
+function getHashFileName(relativeFilePath, md5) {
   if (!md5) {
     return path.basename(relativeFilePath);
   }
@@ -33,7 +43,9 @@ function getFileNewName(relativeFilePath, md5) {
 const defaultImageValidator = /\.(png|jpeg|jpg|gif)$/;
 
 module.exports = {
-  testAsset,
-  getFileNewName,
+  isRequireStatement,
+  isValidArgument,
+  isValidAsset,
+  getHashFileName,
   defaultImageValidator
 };
