@@ -54,12 +54,12 @@ describe('index', () => {
     expect(result3).toEqual(
       `const test = "https://cdn.com/images/test.7487.customize";`
     );
-    const result4 = transformCode(getFixtures('require-png.js'), {
+    const result4 = transformCode(getFixtures('require-customize.js'), {
       publicPath: 'https://cdn.com/images/',
       test: 1
     }).code;
     expect(result4).toEqual(
-      `const test = require('../../some/assets/deep/folder/assets/path/to/test.png');`
+      `const test = require('../../some/assets/deep/folder/assets/path/to/test.customize');`
     );
   });
 
@@ -75,5 +75,18 @@ describe('index', () => {
   test('should do nothing when not a require assignment', function () {
     const result = transformCode(getFixtures('require-var.js')).code;
     expect(result).toEqual("const test = 'something';");
+  });
+
+  test('should do nothing when require not a string assignment', function () {
+    const result = transformCode(getFixtures('require-not-string.js')).code;
+    expect(result).toEqual('const test = require(123);');
+  });
+
+  test('should do nothing when require assignment has member without default', function () {
+    const result = transformCode(getFixtures('require-member-not-default.js'))
+      .code;
+    expect(result).toEqual(
+      `const test = require('../../some/assets/deep/folder/assets/path/to/test.png').member;`
+    );
   });
 });
