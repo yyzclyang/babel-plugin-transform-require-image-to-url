@@ -9,6 +9,9 @@ function testAsset(rule, fileName) {
     case '[object String]': {
       return new RegExp(rule).test(fileName);
     }
+    case '[object Function]': {
+      return rule(fileName);
+    }
     default: {
       return false;
     }

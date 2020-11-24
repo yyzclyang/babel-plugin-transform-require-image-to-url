@@ -45,11 +45,20 @@ describe('index', () => {
     expect(result2).toEqual(
       `const test = "https://cdn.com/images/test.7487.customize";`
     );
-    const result3 = transformCode(getFixtures('require-png.js'), {
+    const result3 = transformCode(getFixtures('require-customize.js'), {
+      publicPath: 'https://cdn.com/images/',
+      test: fileName => {
+        return /test\.customize$/.test(fileName);
+      }
+    }).code;
+    expect(result3).toEqual(
+      `const test = "https://cdn.com/images/test.7487.customize";`
+    );
+    const result4 = transformCode(getFixtures('require-png.js'), {
       publicPath: 'https://cdn.com/images/',
       test: 1
     }).code;
-    expect(result3).toEqual(
+    expect(result4).toEqual(
       `const test = require('../../some/assets/deep/folder/assets/path/to/test.png');`
     );
   });
