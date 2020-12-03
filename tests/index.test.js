@@ -1,3 +1,5 @@
+const fn = require('jest');
+const path = require('path');
 const { transformCode, getFixtures } = require('./util');
 
 describe('index', () => {
@@ -87,6 +89,25 @@ describe('index', () => {
       .code;
     expect(result).toEqual(
       `const test = require('../../some/assets/deep/folder/assets/path/to/test.png').member;`
+    );
+  });
+
+  test('the hook should be executed when the hook is set', function () {
+    const fn = jest.fn();
+    transformCode(getFixtures('require-jpg.js'), {
+      publicPath: 'https://cdn.com/',
+      hook: fn
+    }).code;
+
+    expect(fn).toHaveBeenCalledWith(
+      'test.jpg',
+      path.resolve(
+        __dirname,
+        './fixtures',
+        '../../some/assets/deep/folder/assets/path/to/test.jpg'
+      ),
+      'test.ee0f.jpg',
+      'https://cdn.com/test.ee0f.jpg'
     );
   });
 });
