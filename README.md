@@ -135,3 +135,27 @@ module.exports = {
 ```
 
 The cdn picture address is `https://cdn.com/image.1ms2md3j.png`
+
+#### hook
+
+> The hook executed when the image resource is converted
+
+e.g.
+
+```javascript
+module.exports = {
+  plugins: [
+    [
+      'transform-require-image-to-string',
+      {
+        publicPath: 'https://cdn.com',
+        hook: (fileName, filePath, hashFileName, imagePublicUrl) => {
+          // you can do something
+        }
+      }
+    ]
+  ]
+};
+```
+
+The cdn picture address is `https://cdn.com/image.1ms2md3j.png
