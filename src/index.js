@@ -16,7 +16,8 @@ module.exports = function ({ types: t }) {
             opts: {
               test: imageValidator = defaultImageValidator,
               publicPath = '',
-              md5 = 4
+              md5 = 4,
+              hook
             }
           } = state;
 
@@ -32,13 +33,17 @@ module.exports = function ({ types: t }) {
 
           if (isValidAsset(imageValidator, fileName)) {
             const pp = p.parentPath;
+            const imagePublicUrl = publicPath + hashFileName;
+
             if (t.isMemberExpression(pp)) {
               if (pp.toComputedKey().value === 'default') {
-                pp.replaceWith(t.valueToNode(publicPath + hashFileName));
+                pp.replaceWith(t.valueToNode(imagePublicUrl));
               }
             } else {
-              p.replaceWith(t.valueToNode(publicPath + hashFileName));
+              p.replaceWith(t.valueToNode(imagePublicUrl));
             }
+            typeof hook === 'function' &&
+              hook(fileName, filePath, hashFileName, imagePublicUrl);
           }
         }
       }
