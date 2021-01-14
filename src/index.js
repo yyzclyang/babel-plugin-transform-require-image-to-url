@@ -32,16 +32,9 @@ module.exports = function ({ types: t }) {
           );
 
           if (isValidAsset(imageValidator, fileName)) {
-            const pp = p.parentPath;
             const imagePublicUrl = publicPath + hashFileName;
 
-            if (t.isMemberExpression(pp)) {
-              if (pp.toComputedKey().value === 'default') {
-                pp.replaceWith(t.valueToNode(imagePublicUrl));
-              }
-            } else {
-              p.replaceWith(t.valueToNode(imagePublicUrl));
-            }
+            p.replaceWith(t.valueToNode(imagePublicUrl));
             typeof hook === 'function' &&
               hook(fileName, filePath, hashFileName, imagePublicUrl);
           }

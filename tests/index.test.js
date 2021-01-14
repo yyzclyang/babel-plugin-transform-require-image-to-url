@@ -65,15 +65,6 @@ describe('index', () => {
     );
   });
 
-  test('should replace require image default with uri', () => {
-    const result = transformCode(getFixtures('require-default.js'), {
-      publicPath: 'https://cdn.com/images/'
-    }).code;
-    expect(result).toEqual(
-      `const test = "https://cdn.com/images/test.ed8f.png";`
-    );
-  });
-
   test('should do nothing when not a require assignment', function () {
     const result = transformCode(getFixtures('require-var.js')).code;
     expect(result).toEqual("const test = 'something';");
@@ -82,14 +73,6 @@ describe('index', () => {
   test('should do nothing when require not a string assignment', function () {
     const result = transformCode(getFixtures('require-not-string.js')).code;
     expect(result).toEqual('const test = require(123);');
-  });
-
-  test('should do nothing when require assignment has member without default', function () {
-    const result = transformCode(getFixtures('require-member-not-default.js'))
-      .code;
-    expect(result).toEqual(
-      `const test = require('../../some/assets/deep/folder/assets/path/to/test.png').member;`
-    );
   });
 
   test('the hook should be executed when the hook is set', function () {

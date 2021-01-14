@@ -10,15 +10,11 @@
 
 ```javascript
 const image1 = require('../path/image.png');
-const image2 = require('../path/image.png').default;
 <img src={require('../path/image.png')} />
-<img src={require('../path/image.png').default} />
 
       ↓ ↓ ↓ ↓ ↓ ↓
 
 const image1 = 'https://cdn.com/image.1ms2.png';
-const image2 = 'https://cdn.com/image.1ms2.png';
-<img src={'https://cdn.com/image.1ms2.png'} />
 <img src={'https://cdn.com/image.1ms2.png'} />
 ```
 
