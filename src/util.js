@@ -11,16 +11,23 @@ function isValidArgument(p) {
   return arg && arg.isStringLiteral();
 }
 
-function isValidAsset(validator, fileName) {
+function isNeedTransform(imageSrcValue, test, exclude) {
+  return (
+    assetValidator(imageSrcValue, test) &&
+    !assetValidator(imageSrcValue, exclude)
+  );
+}
+
+function assetValidator(imageSrcValue, validator) {
   switch (Object.prototype.toString.call(validator)) {
     case '[object RegExp]': {
-      return validator.test(fileName);
+      return validator.test(imageSrcValue);
     }
     case '[object String]': {
-      return new RegExp(validator).test(fileName);
+      return new RegExp(validator).test(imageSrcValue);
     }
     case '[object Function]': {
-      return validator(fileName);
+      return validator(imageSrcValue);
     }
     default: {
       return false;
@@ -40,12 +47,18 @@ function getHashFileName(relativeFilePath, md5) {
   return baseName + '.' + md5Value.substr(0, md5) + extName;
 }
 
-const defaultImageValidator = /\.(png|jpeg|jpg|gif)$/;
+const defaultOptions = {
+  test: /\.(png|jpeg|jpg|gif)$/,
+  exclude: /\.local\.(png|jpeg|jpg|gif)$/,
+  publicPath: '',
+  outPath: 'dist/cdn-assets',
+  md5: 4
+};
 
 module.exports = {
   isRequireStatement,
   isValidArgument,
-  isValidAsset,
+  isNeedTransform,
   getHashFileName,
-  defaultImageValidator
+  defaultOptions
 };

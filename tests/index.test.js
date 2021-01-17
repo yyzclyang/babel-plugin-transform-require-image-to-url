@@ -1,4 +1,3 @@
-const fn = require('jest');
 const path = require('path');
 const { transformCode, getFixtures } = require('./util');
 
@@ -62,6 +61,15 @@ describe('index', () => {
     }).code;
     expect(result4).toEqual(
       `const test = require('../../some/assets/deep/folder/assets/path/to/test.customize');`
+    );
+  });
+
+  test('should do nothing when set exclude', function () {
+    const result = transformCode(getFixtures('require-exclude-asset.js'), {
+      exclude: /\.exclude\.(png|jpeg|jpg|gif)$/
+    }).code;
+    expect(result).toEqual(
+      "const test = require('../../some/assets/deep/folder/assets/path/to/test.exclude.jpg');"
     );
   });
 
