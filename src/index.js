@@ -1,10 +1,9 @@
-const path = require('path');
 const {
   isRequireStatement,
   isValidArgument,
   isNeedTransform,
-  getHashFileName,
-  defaultOptions
+  defaultOptions,
+  handler
 } = require('./util');
 
 module.exports = function ({ types: t }) {
@@ -12,28 +11,22 @@ module.exports = function ({ types: t }) {
     visitor: {
       CallExpression(p, state) {
         if (isRequireStatement(p) && isValidArgument(p)) {
-          const { opts } = state;
-          const options = Object.assign({}, defaultOptions, opts);
-          const { test, exclude, publicPath, md5, hook } = options;
+          const options = Object.assign({}, defaultOptions, state.opts);
 
           const imageSrcValue = p.get('arguments')[0].node.value;
 
-          if (isNeedTransform(imageSrcValue, test, exclude)) {
-            const filePath = path.resolve(
-              path.dirname(state.file.opts.filename),
-              imageSrcValue
-            );
-            const fileName = path.basename(filePath);
-            const hashFileName = getHashFileName(
-              path.relative(state.cwd, filePath),
-              md5
-            );
+          if (isNeedTransform(imageSrcValue, options)) {
+            // 引用图片的文件的路径
+            const resourceFilePath = state.file.opts.filename;
 
-            const imagePublicUrl = publicPath + hashFileName;
+            const imagePublicUrl = handler(
+              imageSrcValue,
+              resourceFilePath,
+              state.cwd,
+              options
+            );
 
             p.replaceWith(t.valueToNode(imagePublicUrl));
-            typeof hook === 'function' &&
-              hook(fileName, filePath, hashFileName, imagePublicUrl);
           }
         }
       }

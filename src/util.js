@@ -11,7 +11,9 @@ function isValidArgument(p) {
   return arg && arg.isStringLiteral();
 }
 
-function isNeedTransform(imageSrcValue, test, exclude) {
+function isNeedTransform(imageSrcValue, options) {
+  const { test, exclude } = options;
+
   return (
     assetValidator(imageSrcValue, test) &&
     !assetValidator(imageSrcValue, exclude)
@@ -35,16 +37,43 @@ function assetValidator(imageSrcValue, validator) {
   }
 }
 
-function getHashFileName(relativeFilePath, md5) {
+function getHashFileName(imageFileRelativePath, md5) {
   if (!md5) {
-    return path.basename(relativeFilePath);
+    return path.basename(imageFileRelativePath);
   }
-  const extName = path.extname(relativeFilePath);
-  const baseName = path.basename(relativeFilePath, extName);
+  const extName = path.extname(imageFileRelativePath);
+  const baseName = path.basename(imageFileRelativePath, extName);
   const fsHash = crypto.createHash('md5');
-  fsHash.update(relativeFilePath);
+  fsHash.update(imageFileRelativePath);
   const md5Value = fsHash.digest('hex');
   return baseName + '.' + md5Value.substr(0, md5) + extName;
+}
+
+function handler(
+  imageSrcValue,
+  resourceFilePath,
+  currentWorkingDirectory,
+  options
+) {
+  const { publicPath, md5, hook } = options;
+
+  const imageFilePath = path.resolve(
+    path.dirname(resourceFilePath),
+    imageSrcValue
+  );
+  const imageFileName = path.basename(imageFilePath);
+
+  const hashFileName = getHashFileName(
+    path.relative(currentWorkingDirectory, imageFilePath),
+    md5
+  );
+
+  const imagePublicUrl = publicPath + hashFileName;
+
+  typeof hook === 'function' &&
+    hook(imageFileName, imageFilePath, hashFileName, imagePublicUrl);
+
+  return imagePublicUrl;
 }
 
 const defaultOptions = {
@@ -59,6 +88,6 @@ module.exports = {
   isRequireStatement,
   isValidArgument,
   isNeedTransform,
-  getHashFileName,
+  handler,
   defaultOptions
 };
