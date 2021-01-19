@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const { transformFileSync } = require('@babel/core');
 
 const plugin = path.join(path.resolve(__dirname, '..', 'src'), 'index.js');
@@ -16,4 +17,8 @@ function getFixtures(name) {
   return path.resolve(__dirname, 'fixtures', name);
 }
 
-module.exports = { transformCode, getFixtures };
+function isFileExistsSync(fileRelativePath) {
+  return fs.existsSync(path.join(process.cwd(), fileRelativePath));
+}
+
+module.exports = { transformCode, getFixtures, isFileExistsSync };

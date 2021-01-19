@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const md5File = require('md5-file');
 
 function isRequireStatement(p) {
@@ -48,8 +49,17 @@ function getFileHashName(imageFileAbsolutePath, md5) {
   return imageBaseName + '.' + imageMd5.substr(0, md5) + imageExtName;
 }
 
+function copyFileSync(from, to) {
+  if (fs.existsSync(to)) {
+    return;
+  }
+  const toDir = path.dirname(to);
+  fs.mkdirSync(toDir, { recursive: true });
+  fs.copyFileSync(from, to);
+}
+
 function handler(imageSrcValue, resourceFilePath, options) {
-  const { publicPath, md5, hook } = options;
+  const { publicPath, md5, hook, outputPath, emitFile } = options;
 
   const imageFilePath = path.resolve(
     path.dirname(resourceFilePath),
@@ -58,6 +68,11 @@ function handler(imageSrcValue, resourceFilePath, options) {
   const imageFileName = path.basename(imageFilePath);
   const imageHashName = getFileHashName(imageFilePath, md5);
   const imagePublicUrl = publicPath + imageHashName;
+
+  if (emitFile) {
+    const imageOutputPath = path.join(process.cwd(), outputPath, imageHashName);
+    copyFileSync(imageFilePath, imageOutputPath);
+  }
 
   typeof hook === 'function' &&
     hook(imageFileName, imageFilePath, imageHashName, imagePublicUrl);
@@ -69,8 +84,9 @@ const defaultOptions = {
   test: /\.(png|jpeg|jpg|gif)$/,
   exclude: /\.local\.(png|jpeg|jpg|gif)$/,
   publicPath: '',
-  outPath: 'dist/cdn-assets',
-  md5: 4
+  outputPath: 'dist/cdn-assets',
+  md5: 4,
+  emitFile: true
 };
 
 module.exports = {

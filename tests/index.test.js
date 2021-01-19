@@ -1,16 +1,34 @@
 const path = require('path');
-const { transformCode, getFixtures } = require('./util');
+const fs = require('fs');
+const { transformCode, getFixtures, isFileExistsSync } = require('./util');
+
+afterEach(() => {
+  fs.rmdirSync(path.join(process.cwd(), 'dist'), {
+    recursive: true
+  });
+});
 
 describe('index', () => {
   test('should replace require (png、jpeg、jpg、gif) with uri by default', () => {
+    expect(isFileExistsSync('dist/cdn-assets/test.be63.png')).toEqual(false);
     const pngResult = transformCode(getFixtures('require-png.js'), {}).code;
     expect(pngResult).toEqual(`const test = "test.be63.png";`);
+    expect(isFileExistsSync('dist/cdn-assets/test.be63.png')).toEqual(true);
+
+    expect(isFileExistsSync('dist/cdn-assets/test.892c.jpeg')).toEqual(false);
     const jpegResult = transformCode(getFixtures('require-jpeg.js'), {}).code;
     expect(jpegResult).toEqual(`const test = "test.892c.jpeg";`);
+    expect(isFileExistsSync('dist/cdn-assets/test.892c.jpeg')).toEqual(true);
+
+    expect(isFileExistsSync('dist/cdn-assets/test.6e0b.jpg')).toEqual(false);
     const jpgResult = transformCode(getFixtures('require-jpg.js'), {}).code;
     expect(jpgResult).toEqual(`const test = "test.6e0b.jpg";`);
+    expect(isFileExistsSync('dist/cdn-assets/test.6e0b.jpg')).toEqual(true);
+
+    expect(isFileExistsSync('dist/cdn-assets/test.39c1.gif')).toEqual(false);
     const gifResult = transformCode(getFixtures('require-gif.js'), {}).code;
     expect(gifResult).toEqual(`const test = "test.39c1.gif";`);
+    expect(isFileExistsSync('dist/cdn-assets/test.39c1.gif')).toEqual(true);
   });
 
   test('should replace require image with uri when set md5', () => {
@@ -60,6 +78,15 @@ describe('index', () => {
     expect(result4).toEqual(`const test = require('./assets/test.customize');`);
   });
 
+  test('should copy the files to the specified directory when set outputPath', () => {
+    expect(isFileExistsSync('dist/custom/folder/test.be63.png')).toEqual(false);
+    const pngResult = transformCode(getFixtures('require-png.js'), {
+      outputPath: 'dist/custom/folder'
+    }).code;
+    expect(pngResult).toEqual(`const test = "test.be63.png";`);
+    expect(isFileExistsSync('dist/custom/folder/test.be63.png')).toEqual(true);
+  });
+
   test('should do nothing when set exclude', function () {
     const result = transformCode(getFixtures('require-exclude-asset.js'), {
       exclude: /\.exclude\.(png|jpeg|jpg|gif)$/
@@ -77,6 +104,15 @@ describe('index', () => {
   test('should do nothing when require not a string assignment', function () {
     const result = transformCode(getFixtures('require-not-string.js')).code;
     expect(result).toEqual('const test = require(123);');
+  });
+
+  test('should not copy files when set emitFile is false', () => {
+    expect(isFileExistsSync('dist/cdn-assets/test.be63.png')).toEqual(false);
+    const pngResult = transformCode(getFixtures('require-png.js'), {
+      emitFile: false
+    }).code;
+    expect(pngResult).toEqual(`const test = "test.be63.png";`);
+    expect(isFileExistsSync('dist/cdn-assets/test.be63.png')).toEqual(false);
   });
 
   test('the hook should be executed when the hook is set', function () {
