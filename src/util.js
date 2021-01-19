@@ -1,5 +1,5 @@
 const path = require('path');
-const crypto = require('crypto');
+const md5File = require('md5-file');
 
 function isRequireStatement(p) {
   const callee = p.get('callee');
@@ -37,24 +37,18 @@ function assetValidator(imageSrcValue, validator) {
   }
 }
 
-function getHashFileName(imageFileRelativePath, md5) {
+function getFileHashName(imageFileAbsolutePath, md5) {
   if (!md5) {
-    return path.basename(imageFileRelativePath);
+    return path.basename(imageFileAbsolutePath);
   }
-  const extName = path.extname(imageFileRelativePath);
-  const baseName = path.basename(imageFileRelativePath, extName);
-  const fsHash = crypto.createHash('md5');
-  fsHash.update(imageFileRelativePath);
-  const md5Value = fsHash.digest('hex');
-  return baseName + '.' + md5Value.substr(0, md5) + extName;
+  const imageExtName = path.extname(imageFileAbsolutePath);
+  const imageBaseName = path.basename(imageFileAbsolutePath, imageExtName);
+  const imageMd5 = md5File.sync(imageFileAbsolutePath);
+
+  return imageBaseName + '.' + imageMd5.substr(0, md5) + imageExtName;
 }
 
-function handler(
-  imageSrcValue,
-  resourceFilePath,
-  currentWorkingDirectory,
-  options
-) {
+function handler(imageSrcValue, resourceFilePath, options) {
   const { publicPath, md5, hook } = options;
 
   const imageFilePath = path.resolve(
@@ -62,16 +56,11 @@ function handler(
     imageSrcValue
   );
   const imageFileName = path.basename(imageFilePath);
-
-  const hashFileName = getHashFileName(
-    path.relative(currentWorkingDirectory, imageFilePath),
-    md5
-  );
-
-  const imagePublicUrl = publicPath + hashFileName;
+  const imageHashName = getFileHashName(imageFilePath, md5);
+  const imagePublicUrl = publicPath + imageHashName;
 
   typeof hook === 'function' &&
-    hook(imageFileName, imageFilePath, hashFileName, imagePublicUrl);
+    hook(imageFileName, imageFilePath, imageHashName, imagePublicUrl);
 
   return imagePublicUrl;
 }

@@ -22,7 +22,6 @@ module.exports = function ({ types: t }) {
             const imagePublicUrl = handler(
               imageSrcValue,
               resourceFilePath,
-              state.cwd,
               options
             );
 

@@ -1,1 +1,1 @@
-const test = require('../../some/assets/deep/folder/assets/path/to/test.gif');
+const test = require('./assets/test.gif');
