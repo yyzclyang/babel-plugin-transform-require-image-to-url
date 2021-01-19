@@ -38,15 +38,15 @@ function assetValidator(imageSrcValue, validator) {
   }
 }
 
-function getFileHashName(imageFileAbsolutePath, md5) {
-  if (!md5) {
+function getFileHashName(imageFileAbsolutePath, md5Length) {
+  if (!md5Length) {
     return path.basename(imageFileAbsolutePath);
   }
   const imageExtName = path.extname(imageFileAbsolutePath);
   const imageBaseName = path.basename(imageFileAbsolutePath, imageExtName);
   const imageMd5 = md5File.sync(imageFileAbsolutePath);
 
-  return imageBaseName + '.' + imageMd5.substr(0, md5) + imageExtName;
+  return imageBaseName + '.' + imageMd5.substr(0, md5Length) + imageExtName;
 }
 
 function copyFileSync(from, to) {
@@ -59,14 +59,14 @@ function copyFileSync(from, to) {
 }
 
 function handler(imageSrcValue, resourceFilePath, options) {
-  const { publicPath, md5, hook, outputPath, emitFile } = options;
+  const { publicPath, md5Length, hook, outputPath, emitFile } = options;
 
   const imageFilePath = path.resolve(
     path.dirname(resourceFilePath),
     imageSrcValue
   );
   const imageFileName = path.basename(imageFilePath);
-  const imageHashName = getFileHashName(imageFilePath, md5);
+  const imageHashName = getFileHashName(imageFilePath, md5Length);
   const imagePublicUrl = publicPath + imageHashName;
 
   if (emitFile) {
@@ -85,7 +85,7 @@ const defaultOptions = {
   exclude: /\.local\.(png|jpeg|jpg|gif)$/,
   publicPath: '',
   outputPath: 'dist/cdn-assets',
-  md5: 4,
+  md5Length: 4,
   emitFile: true
 };
 

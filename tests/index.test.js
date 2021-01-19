@@ -31,12 +31,14 @@ describe('index', () => {
     expect(isFileExistsSync('dist/cdn-assets/test.39c1.gif')).toEqual(true);
   });
 
-  test('should replace require image with uri when set md5', () => {
-    const result1 = transformCode(getFixtures('require-png.js'), { md5: 0 })
-      .code;
+  test('should replace require image with uri when set md5Length', () => {
+    const result1 = transformCode(getFixtures('require-png.js'), {
+      md5Length: 0
+    }).code;
     expect(result1).toEqual(`const test = "test.png";`);
-    const result2 = transformCode(getFixtures('require-png.js'), { md5: 8 })
-      .code;
+    const result2 = transformCode(getFixtures('require-png.js'), {
+      md5Length: 8
+    }).code;
     expect(result2).toEqual(`const test = "test.be63cdc1.png";`);
   });
 
