@@ -39,8 +39,10 @@ yarn add -D babel-plugin-transform-require-image-to-string
       "transform-require-image-to-string",
       {
         "test": ".png$",
+        "exclude": ".local.png$",
         "publicPath": "https://cdn.com",
-        "md5": 8
+        "outputPath": "dist/folder",
+        "md5Length": 8
       }
     ]
   ]
@@ -56,8 +58,10 @@ module.exports = {
       'transform-require-image-to-string',
       {
         test: /\.png$/,
+        exclude: /\.local\.png$/,
         publicPath: 'https://cdn.com',
-        md5: 8
+        outputPath: 'dist/folder',
+        md5Length: 8
       }
     ]
   ]
@@ -91,6 +95,29 @@ The above three writings are equivalent
 
 The default validator is a regexp, which is `/\.(png|jpeg|jpg|gif)$/`
 
+#### exclude
+
+> Image resource validator, Exclude images that do not need to be converted
+
+e.g.
+
+```javascript
+module.exports = {
+  plugins: [
+    [
+      'transform-require-image-to-string',
+      {
+        test: /\.local\.png$/
+        // test: '\.local\.png$'
+        // test: (imageName: string) => /\.local\.png$/.test(imageName)
+      }
+    ]
+  ]
+};
+```
+
+The default validator is a regexp, which is `/\.local\.(png|jpeg|jpg|gif)$/`
+
 #### publicPath
 
 > The cdn address of the image resource
@@ -110,7 +137,47 @@ module.exports = {
 };
 ```
 
-#### md5
+#### outputPath
+
+> The path to which the image was copied when it was converted
+
+e.g.
+
+```javascript
+module.exports = {
+  plugins: [
+    [
+      'transform-require-image-to-string',
+      {
+        outputPath: 'dist/custom/folder'
+      }
+    ]
+  ]
+};
+```
+
+The default path is `dist/cdn-assets`
+
+#### emitFile
+
+> Whether the image is copied to the specified path when converted
+
+```javascript
+module.exports = {
+  plugins: [
+    [
+      'transform-require-image-to-string',
+      {
+        emitFile: false
+      }
+    ]
+  ]
+};
+```
+
+The default value is `true`
+
+#### md5Length
 
 > The length of the md5 value in the image name
 
@@ -123,7 +190,7 @@ module.exports = {
       'transform-require-image-to-string',
       {
         publicPath: 'https://cdn.com',
-        md5: 8 // default 4
+        md5Length: 8 // default 4
       }
     ]
   ]
