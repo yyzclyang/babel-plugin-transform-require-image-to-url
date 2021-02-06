@@ -1,7 +1,7 @@
 {
   "name": "babel-plugin-transform-require-image-to-url",
   "description": "Babel plugin that transforms image assets requires to url",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "main": "lib/index.js",
   "scripts": {
     "build": "babel src --out-dir lib",
