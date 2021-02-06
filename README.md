@@ -3,7 +3,7 @@
 > Babel plugin that transforms image assets requires to url
 
 ![GithubAction](https://github.com/yyzclyang/babel-plugin-transform-require-image-to-url/workflows/UnitTest/badge.svg)
-[![Github](https://img.shields.io/github/license/yyzclyang/babel-plugin-transform-require-image-to-url.svg)](https://github.com/yyzclyang/babel-plugin-transform-require-image-to-url)
+[![Github](https://img.shields.io/github/license/yyzclyang/babel-plugin-transform-require-image-to-url)](https://github.com/yyzclyang/babel-plugin-transform-require-image-to-url)
 [![npm](https://img.shields.io/npm/v/babel-plugin-transform-require-image-to-url.svg)](https://www.npmjs.com/package/babel-plugin-transform-require-image-to-url)
 
 ## Example
