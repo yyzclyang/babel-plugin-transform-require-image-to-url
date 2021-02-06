@@ -1,31 +1,31 @@
-# babel-plugin-transform-require-image-to-string
+# babel-plugin-transform-require-image-to-url
 
 > Babel plugin that transforms image assets requires to url
 
-![GithubAction](https://github.com/yyzclyang/babel-plugin-transform-require-image-to-string/workflows/UnitTest/badge.svg)
-[![Github](https://img.shields.io/github/license/yyzclyang/babel-plugin-transform-require-image-to-string.svg)](https://github.com/yyzclyang/babel-plugin-transform-require-image-to-string)
-[![npm](https://img.shields.io/npm/v/babel-plugin-transform-require-image-to-string.svg)](https://www.npmjs.com/package/babel-plugin-transform-require-image-to-string)
+![GithubAction](https://github.com/yyzclyang/babel-plugin-transform-require-image-to-url/workflows/UnitTest/badge.svg)
+[![Github](https://img.shields.io/github/license/yyzclyang/babel-plugin-transform-require-image-to-url.svg)](https://github.com/yyzclyang/babel-plugin-transform-require-image-to-url)
+[![npm](https://img.shields.io/npm/v/babel-plugin-transform-require-image-to-url.svg)](https://www.npmjs.com/package/babel-plugin-transform-require-image-to-url)
 
 ## Example
 
 ```javascript
-const image1 = require('../path/image.png');
+const image = require('../path/image.png');
 <img src={require('../path/image.png')} />
 
       ↓ ↓ ↓ ↓ ↓ ↓
 
-const image1 = 'https://cdn.com/image.1ms2.png';
+const image = 'https://cdn.com/image.1ms2.png';
 <img src={'https://cdn.com/image.1ms2.png'} />
 ```
 
 ## Installation
 
 ```bash
-npm install babel-plugin-transform-require-image-to-string --save-dev
+npm install babel-plugin-transform-require-image-to-url --save-dev
 
 #or
 
-yarn add -D babel-plugin-transform-require-image-to-string
+yarn add -D babel-plugin-transform-require-image-to-url
 ```
 
 ## Usage
@@ -36,7 +36,7 @@ yarn add -D babel-plugin-transform-require-image-to-string
 {
   "plugins": [
     [
-      "transform-require-image-to-string",
+      "transform-require-image-to-url",
       {
         "test": ".png$",
         "exclude": ".local.png$",
@@ -55,7 +55,7 @@ yarn add -D babel-plugin-transform-require-image-to-string
 module.exports = {
   plugins: [
     [
-      'transform-require-image-to-string',
+      'transform-require-image-to-url',
       {
         test: /\.png$/,
         exclude: /\.local\.png$/,
@@ -80,7 +80,7 @@ e.g.
 module.exports = {
   plugins: [
     [
-      'transform-require-image-to-string',
+      'transform-require-image-to-url',
       {
         test: /\.png$/
         // test: '\.png$'
@@ -105,7 +105,7 @@ e.g.
 module.exports = {
   plugins: [
     [
-      'transform-require-image-to-string',
+      'transform-require-image-to-url',
       {
         test: /\.local\.png$/
         // test: '\.local\.png$'
@@ -128,7 +128,7 @@ e.g.
 module.exports = {
   plugins: [
     [
-      'transform-require-image-to-string',
+      'transform-require-image-to-url',
       {
         publicPath: 'https://cdn.com'
       }
@@ -147,7 +147,7 @@ e.g.
 module.exports = {
   plugins: [
     [
-      'transform-require-image-to-string',
+      'transform-require-image-to-url',
       {
         outputPath: 'dist/custom/folder'
       }
@@ -166,7 +166,7 @@ The default path is `dist/cdn-assets`
 module.exports = {
   plugins: [
     [
-      'transform-require-image-to-string',
+      'transform-require-image-to-url',
       {
         emitFile: false
       }
@@ -187,7 +187,7 @@ e.g.
 module.exports = {
   plugins: [
     [
-      'transform-require-image-to-string',
+      'transform-require-image-to-url',
       {
         publicPath: 'https://cdn.com',
         md5Length: 8 // default 4
@@ -209,7 +209,7 @@ e.g.
 module.exports = {
   plugins: [
     [
-      'transform-require-image-to-string',
+      'transform-require-image-to-url',
       {
         publicPath: 'https://cdn.com',
         hook: (fileName, filePath, hashFileName, imagePublicUrl) => {

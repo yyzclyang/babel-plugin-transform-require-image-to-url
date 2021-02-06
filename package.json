@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-transform-require-image-to-string",
+  "name": "babel-plugin-transform-require-image-to-url",
   "description": "Babel plugin that transforms image assets requires to url",
   "version": "0.0.2",
   "main": "lib/index.js",
@@ -14,7 +14,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yyzclyang/babel-plugin-transform-require-image-to-string.git"
+    "url": "git+https://github.com/yyzclyang/babel-plugin-transform-require-image-to-url.git"
   },
   "author": "yyzcl <yyzclyang@outlook.com>",
   "license": "MIT",
