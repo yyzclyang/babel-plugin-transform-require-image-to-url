@@ -1,12 +1,12 @@
 # babel-plugin-transform-require-image-to-url
 
-> 一个用于转换 `require` 引用的图片资源为 `url` 的 `babel` 插件 
+> Babel plugin that transforms image assets requires to url
 
 ![GithubAction](https://github.com/yyzclyang/babel-plugin-transform-require-image-to-url/workflows/UnitTest/badge.svg)
 [![Github](https://img.shields.io/github/license/yyzclyang/babel-plugin-transform-require-image-to-url)](https://github.com/yyzclyang/babel-plugin-transform-require-image-to-url)
 [![npm](https://img.shields.io/npm/v/babel-plugin-transform-require-image-to-url.svg)](https://www.npmjs.com/package/babel-plugin-transform-require-image-to-url)
 
-## 示例
+## Example
 
 ```javascript
 const image = require('../path/image.png');
@@ -18,7 +18,7 @@ const image = 'https://cdn.com/image.1ms2.png';
 <img src={'https://cdn.com/image.1ms2.png'} />
 ```
 
-## 安装
+## Installation
 
 ```bash
 npm install babel-plugin-transform-require-image-to-url --save-dev
@@ -28,9 +28,9 @@ npm install babel-plugin-transform-require-image-to-url --save-dev
 yarn add -D babel-plugin-transform-require-image-to-url
 ```
 
-## 用法
+## Usage
 
-### 通过 .babelrc
+### via .babelrc
 
 ```json
 {
@@ -49,7 +49,7 @@ yarn add -D babel-plugin-transform-require-image-to-url
 }
 ```
 
-### 通过 .babelrc.js
+### via .babelrc.js
 
 ```javascript
 module.exports = {
@@ -68,13 +68,13 @@ module.exports = {
 };
 ```
 
-### 选项
+### options
 
 #### test
 
-> 图片资源验证器，通过验证的资源才会被转换，支持字符串（会被转为正则表达式），正则表达式和函数
+> Image resource validator, support string, regexp and function
 
-例子
+e.g.
 
 ```javascript
 module.exports = {
@@ -91,15 +91,15 @@ module.exports = {
 };
 ```
 
-这三种写法是等价的
+The above three writings are equivalent
 
-默认的资源验证器是一个正则表达式，为 `/\.(png|jpeg|jpg|gif)$/`
+The default validator is a regexp, which is `/\.(png|jpeg|jpg|gif)$/`
 
 #### exclude
 
-> 资源排除验证器，通过验证的资源将不会被转换
+> Image resource validator, Exclude images that do not need to be converted
 
-例子
+e.g.
 
 ```javascript
 module.exports = {
@@ -116,13 +116,13 @@ module.exports = {
 };
 ```
 
-默认的资源验证器是一个正则表达式，为 `/\.local\.(png|jpeg|jpg|gif)$/`
+The default validator is a regexp, which is `/\.local\.(png|jpeg|jpg|gif)$/`
 
 #### publicPath
 
-> 转换后图片资源 `url` 的前缀
+> The cdn address of the image resource
 
-例子
+e.g.
 
 ```javascript
 module.exports = {
@@ -139,9 +139,9 @@ module.exports = {
 
 #### outputPath
 
-> 图片被转换时，拷贝到的文件夹地址
+> The path to which the image was copied when it was converted
 
-例子
+e.g.
 
 ```javascript
 module.exports = {
@@ -156,13 +156,11 @@ module.exports = {
 };
 ```
 
-默认值为 `dist/cdn-assets`
+The default path is `dist/cdn-assets`
 
 #### emitFile
 
-> 当图片资源被转换成 `url` 时，是否需要将图片拷贝到指定的文件夹
-
-例子
+> Whether the image is copied to the specified path when converted
 
 ```javascript
 module.exports = {
@@ -177,13 +175,13 @@ module.exports = {
 };
 ```
 
-默认值为 `true`
+The default value is `true`
 
 #### md5Length
 
-> 图片资源在转换后名称默认带 `md5` 值，这是设置 `md5` 值的位数
+> The length of the md5 value in the image name
 
-例子
+e.g.
 
 ```javascript
 module.exports = {
@@ -192,20 +190,20 @@ module.exports = {
       'transform-require-image-to-url',
       {
         publicPath: 'https://cdn.com',
-        md5Length: 8 // 默认是 4 位
+        md5Length: 8 // default 4
       }
     ]
   ]
 };
 ```
 
-图片转换后的 `url` 类似为 `https://cdn.com/image.1ms2md3j.png`
+The cdn picture address is `https://cdn.com/image.1ms2md3j.png`
 
 #### hook
 
-> 图片资源被转换时执行的钩子函数 
+> The hook executed when the image resource is converted
 
-例子
+e.g.
 
 ```javascript
 module.exports = {
@@ -215,7 +213,7 @@ module.exports = {
       {
         publicPath: 'https://cdn.com',
         hook: (fileName, filePath, hashFileName, imagePublicUrl) => {
-          // 你可以在图片转换时做一些事
+          // you can do something
         }
       }
     ]
