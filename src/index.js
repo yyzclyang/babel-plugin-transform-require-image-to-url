@@ -24,7 +24,7 @@ module.exports = function ({ types: t }) {
               resourceFilePath,
               options
             );
-
+            // 在 ast 中替换 require 调用节点为 url 字符串节点
             p.replaceWith(t.valueToNode(imagePublicUrl));
           }
         }
