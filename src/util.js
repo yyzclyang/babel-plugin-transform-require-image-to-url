@@ -70,14 +70,19 @@ function assetValidator(imageSrcValue, validator) {
  * @returns {string}
  */
 function getFileHashName(imageFileAbsolutePath, md5Length) {
-  if (!md5Length) {
+  if (md5Length < 1) {
     return path.basename(imageFileAbsolutePath);
   }
   const imageExtName = path.extname(imageFileAbsolutePath);
   const imageBaseName = path.basename(imageFileAbsolutePath, imageExtName);
   const imageMd5 = md5File.sync(imageFileAbsolutePath);
 
-  return imageBaseName + '.' + imageMd5.substr(0, md5Length) + imageExtName;
+  return (
+    imageBaseName +
+    '.' +
+    imageMd5.substr(0, Math.floor(md5Length)) +
+    imageExtName
+  );
 }
 
 /**
